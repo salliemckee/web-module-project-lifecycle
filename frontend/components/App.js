@@ -15,7 +15,7 @@ export default class App extends React.Component {
         this.setState({ ...this.state, todos: res.data.data });
       })
       .catch((err) => {
-        debugger;
+        this.setState({ ...this.state, error: err.response.data.message });
       });
   };
 
@@ -60,6 +60,7 @@ export default class App extends React.Component {
     const { todos } = this.state;
     return (
       <div>
+        <div id="error">Error: {this.state.error}</div>
         <h2>To Dos:</h2>
         <TodoList todos={todos} handleToggle={this.handleToggle} />
         {/* {this.state.todos.map((td) => {
