@@ -10,10 +10,12 @@ export default class Form extends React.Component {
 
   handleSubmit = (evt) => {
     evt.preventDefault();
+    console.log(this.state.input);
     this.props.handleAdd(this.state.input);
   };
 
   handleChange = (evt) => {
+    console.log(this.state.input);
     this.setState({ ...this.state, input: evt.target.value });
   };
   render() {
@@ -21,6 +23,7 @@ export default class Form extends React.Component {
       <div>
         <form>
           <input
+            value={this.state.input}
             type="text"
             placeholder="Type todo"
             id="textInput"

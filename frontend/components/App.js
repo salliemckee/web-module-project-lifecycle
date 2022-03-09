@@ -6,12 +6,13 @@ import axios from "axios";
 const URL = "http://localhost:9000/api/todos";
 
 export default class App extends React.Component {
-  state = { todos: [], error: "" };
+  state = { todos: [], error: "", input: "" };
 
   fetchAllTodos = () => {
     axios
       .get(URL)
       .then((res) => {
+        console.log(res);
         this.setState({ ...this.state, todos: res.data.data });
       })
       .catch((err) => {
@@ -23,13 +24,35 @@ export default class App extends React.Component {
     this.fetchAllTodos();
   }
 
-  handleAdd = (task) => {
-    const newTodo = { id: getIndex(), task: task, completed: false };
-    this.setState({
-      ...this.state,
-      todos: [...this.state.todos, newTodo],
-    });
+  handleAdd = (input) => {
+    console.log(input);
+    // const newTodo = { id: getIndex(), task: task, completed: false };
+    // this.setState({
+    //   ...this.state,
+    //   todos: [...this.state.todos, newTodo],
+    // });
+    axios
+      .post(URL, { name: input })
+      .then(() => {
+        this.fetchAllTodos();
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log(err.Response);
+        this.setState({ ...this.state, error: err.response.data.message });
+      });
   };
+
+  // postNewTodo = () => {
+  //   axios
+  //     .post(URL, { name: this.state.input })
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
 
   handleHide = () => {
     this.setState({
@@ -67,7 +90,7 @@ export default class App extends React.Component {
           return <div key={td.id}>{td.name}</div>;
         })} */}
 
-        <Form handleAdd={this.handleAdd} />
+        <Form handleAdd={this.handleAdd} input={this.state.input} />
         <button onClick={this.handleHide}>
           {this.state.completed ? "Show Completed" : "Hide Completed"}
         </button>
